@@ -1,0 +1,102 @@
+
+  [32m[1mVITE[22m v8.3.3[39m  [2mready in [0m[1m449[22m[2m[0m ms[22m
+
+  [32m➜[39m  [1mLocal[22m:   [36mhttp://127.0.0.1:[1m5174[22m/[39m
+
+  [32m[1mVITE[22m v8.3.3[39m  [2mready in [0m[1m178[22m[2m[0m ms[22m
+
+  [32m➜[39m  [1mLocal[22m:   [36mhttp://127.0.0.1:[1m5174[22m/[39m
+
+  [32m[1mVITE[22m v8.3.3[39m  [2mready in [0m[1m171[22m[2m[0m ms[22m
+
+  [32m➜[39m  [1mLocal[22m:   [36mhttp://127.0.0.1:[1m5174[22m/[39m
+
+  [32m[1mVITE[22m v8.3.3[39m  [2mready in [0m[1m178[22m[2m[0m ms[22m
+
+  [32m➜[39m  [1mLocal[22m:   [36mhttp://127.0.0.1:[1m5174[22m/[39m
+
+  [32m[1mVITE[22m v8.3.3[39m  [2mready in [0m[1m170[22m[2m[0m ms[22m
+
+  [32m➜[39m  [1mLocal[22m:   [36mhttp://127.0.0.1:[1m5174[22m/[39m
+
+  [32m[1mVITE[22m v8.3.3[39m  [2mready in [0m[1m166[22m[2m[0m ms[22m
+
+  [32m➜[39m  [1mLocal[22m:   [36mhttp://127.0.0.1:[1m5174[22m/[39m
+
+  [32m[1mVITE[22m v8.3.3[39m  [2mready in [0m[1m172[22m[2m[0m ms[22m
+
+  [32m➜[39m  [1mLocal[22m:   [36mhttp://127.0.0.1:[1m5174[22m/[39m
+
+  [32m[1mVITE[22m v8.3.3[39m  [2mready in [0m[1m182[22m[2m[0m ms[22m
+
+  [32m➜[39m  [1mLocal[22m:   [36mhttp://127.0.0.1:[1m5174[22m/[39m
+
+  [32m[1mVITE[22m v8.3.3[39m  [2mready in [0m[1m181[22m[2m[0m ms[22m
+
+  [32m➜[39m  [1mLocal[22m:   [36mhttp://127.0.0.1:[1m5174[22m/[39m
+[2m17:35:53[22m [36m[1m[vite][22m[39m [32mvite.config.ts changed, restarting server...[39m
+[2m17:35:53[22m [36m[1m[vite][22m[39m server restarted.
+[2m17:35:56[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/components/Layout/MainLayout.tsx, /src/pages/ProcessPage.tsx, /src/pages/TargetPage.tsx, /src/pages/MonitoringPage.tsx, /src/pages/ModelPage.tsx, /src/pages/CalibrationPage.tsx, /src/pages/CameraPage.tsx, /src/pages/RecordsPage.tsx, /src/pages/ProjectorPage.tsx[22m
+[2m17:46:01[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/components/Layout/MainLayout.tsx, /src/pages/ProcessPage.tsx, /src/pages/TargetPage.tsx, /src/pages/MonitoringPage.tsx, /src/pages/ModelPage.tsx, /src/pages/CalibrationPage.tsx, /src/pages/CameraPage.tsx, /src/pages/RecordsPage.tsx, /src/pages/ProjectorPage.tsx[22m
+[2m17:46:32[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/pages/ProcessPage.tsx[22m
+[2m17:46:37[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/pages/ProcessPage.tsx[22m
+[2m17:46:41[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/pages/ProcessPage.tsx[22m
+[2m17:46:44[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/pages/ProcessPage.tsx[22m
+[2m17:46:51[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/index.css[22m
+[2m17:47:02[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/pages/ProjectorPage.tsx[22m
+[2m17:47:06[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/App.tsx[22m
+[2m17:47:09[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/App.tsx[22m
+[2m17:47:13[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/components/Layout/Sidebar.tsx[22m
+[2m17:47:16[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/components/Layout/Sidebar.tsx[22m
+[2m17:47:27[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/pages/ProcessPage.tsx[22m
+[2m17:49:31[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/pages/SettingsPage.tsx[22m
+[2m17:49:34[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/pages/ProcessPage.tsx[22m
+
+  [32m[1mVITE[22m v8.3.3[39m  [2mready in [0m[1m162[22m[2m[0m ms[22m
+
+  [32m➜[39m  [1mLocal[22m:   [36mhttp://127.0.0.1:[1m5174[22m/[39m
+[2m18:04:32[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/components/Layout/MainLayout.tsx, /src/pages/MonitoringPage.tsx, /src/pages/ProcessPage.tsx, /src/pages/TargetPage.tsx, /src/pages/CalibrationPage.tsx, /src/pages/ModelPage.tsx, /src/pages/CameraPage.tsx, /src/pages/ProjectorPage.tsx, /src/pages/SettingsPage.tsx, /src/pages/RecordsPage.tsx[22m
+[2m18:04:38[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/pages/CalibrationPage.tsx[22m
+[2m18:04:43[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/pages/CalibrationPage.tsx[22m
+[2m18:04:50[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/pages/CalibrationPage.tsx[22m
+[2m18:04:54[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/pages/ProjectorPage.tsx[22m
+
+  [32m[1mVITE[22m v8.3.3[39m  [2mready in [0m[1m159[22m[2m[0m ms[22m
+
+  [32m➜[39m  [1mLocal[22m:   [36mhttp://127.0.0.1:[1m5174[22m/[39m
+
+  [32m[1mVITE[22m v8.3.3[39m  [2mready in [0m[1m166[22m[2m[0m ms[22m
+
+  [32m➜[39m  [1mLocal[22m:   [36mhttp://127.0.0.1:[1m5174[22m/[39m
+[2m15:06:49[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/pages/ProjectorPage.tsx[22m
+
+  [32m[1mVITE[22m v8.3.3[39m  [2mready in [0m[1m166[22m[2m[0m ms[22m
+
+  [32m➜[39m  [1mLocal[22m:   [36mhttp://127.0.0.1:[1m5174[22m/[39m
+[2m15:39:15[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/pages/TargetPage.tsx[22m
+
+  [32m[1mVITE[22m v8.3.3[39m  [2mready in [0m[1m163[22m[2m[0m ms[22m
+
+  [32m➜[39m  [1mLocal[22m:   [36mhttp://127.0.0.1:[1m5174[22m/[39m
+[2m16:01:29[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/components/Layout/MainLayout.tsx, /src/pages/MonitoringPage.tsx, /src/pages/CalibrationPage.tsx, /src/pages/ProcessPage.tsx, /src/pages/TargetPage.tsx, /src/pages/ModelPage.tsx, /src/pages/CameraPage.tsx[22m
+[2m16:01:35[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/components/Layout/MainLayout.tsx, /src/pages/MonitoringPage.tsx, /src/pages/CalibrationPage.tsx, /src/pages/ProcessPage.tsx, /src/pages/TargetPage.tsx, /src/pages/ModelPage.tsx, /src/pages/CameraPage.tsx[22m
+[2m16:01:44[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/pages/TargetPage.tsx[22m
+
+  [32m[1mVITE[22m v8.3.3[39m  [2mready in [0m[1m160[22m[2m[0m ms[22m
+
+  [32m➜[39m  [1mLocal[22m:   [36mhttp://127.0.0.1:[1m5174[22m/[39m
+[2m16:16:30[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/components/Layout/MainLayout.tsx, /src/pages/CalibrationPage.tsx, /src/pages/MonitoringPage.tsx, /src/pages/ProcessPage.tsx, /src/pages/ModelPage.tsx, /src/pages/CameraPage.tsx, /src/pages/TargetPage.tsx, /src/pages/ProjectorPage.tsx, /src/pages/SettingsPage.tsx, /src/pages/RecordsPage.tsx[22m
+[2m16:16:42[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/pages/TargetPage.tsx[22m
+[2m16:16:47[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/pages/TargetPage.tsx[22m
+[2m16:16:51[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/pages/TargetPage.tsx[22m
+[2m16:17:14[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/pages/ProjectorPage.tsx[22m
+[2m16:17:19[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/pages/ProcessPage.tsx[22m
+[2m16:17:50[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/pages/ProcessPage.tsx[22m
+
+  [32m[1mVITE[22m v8.3.3[39m  [2mready in [0m[1m160[22m[2m[0m ms[22m
+
+  [32m➜[39m  [1mLocal[22m:   [36mhttp://127.0.0.1:[1m5174[22m/[39m
+
+  [32m[1mVITE[22m v8.3.3[39m  [2mready in [0m[1m390[22m[2m[0m ms[22m
+
+  [32m➜[39m  [1mLocal[22m:   [36mhttp://127.0.0.1:[1m5174[22m/[39m

@@ -1,0 +1,16 @@
+2026-10-14 14:24:31,518 [INFO] optical-guidance: [App] Database initialized; DATA_DIR=C:\Users\21449\Desktop\optical-guidance\optical-guidance-data
+INFO:     127.0.0.1:60839 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60844 - "GET /api/config HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60845 - "GET /api/targets/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60846 - "GET /api/processes/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60847 - "GET /api/calibration/current HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60848 - "GET /api/projector/state HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60849 - "GET /api/settings/guide HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60850 - "GET /api/cameras/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60851 - "GET /api/models/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60852 - "GET /api/records/runs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60853 - "GET /api/records/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60854 - "GET /api/processes/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60855 - "POST /api/runtime/start HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60858 - "POST /api/runtime/stop HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60860 - "GET /api/runtime/status HTTP/1.1" 200 OK

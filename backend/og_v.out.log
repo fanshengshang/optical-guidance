@@ -1,0 +1,7 @@
+2026-10-14 15:10:11,650 [INFO] optical-guidance: [App] 对账：4 条遗留 running 记录已标记为 aborted
+2026-10-14 15:10:11,653 [INFO] optical-guidance: [App] Database initialized; DATA_DIR=C:\Users\21449\Desktop\optical-guidance\optical-guidance-data
+INFO:     127.0.0.1:49722 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57770 - "GET /api/records/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57771 - "GET /api/projector/state HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57772 - "GET /api/processes/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57773 - "POST /api/runtime/start HTTP/1.1" 400 Bad Request

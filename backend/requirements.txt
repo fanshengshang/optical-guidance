@@ -1,0 +1,11 @@
+# 光学引导系统 · 后端依赖
+# 注：本机 opencv-python 必须 >= 5（4.14 的未签名 DLL 会被 Windows 智能应用控制拦截）
+fastapi
+uvicorn[standard]
+sqlalchemy
+pydantic
+python-multipart
+numpy
+opencv-python
+mediapipe
+Pillow

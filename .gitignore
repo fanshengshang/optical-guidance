@@ -1,0 +1,33 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+.pytest_cache/
+
+# 前端（React/Node）
+frontend/node_modules/
+frontend/dist/
+frontend/.env
+frontend/.env.local
+
+# 投影仪浏览器缓存（垃圾，绝不入库）
+.projector-profile/
+
+# 数据 / 模型权重 / 录像
+data/
+*.pt
+*.pth
+*.weights
+*.onnx
+*.mp4
+*.avi
+*.mov
+*.wav
+
+# 系统 / 编辑器
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

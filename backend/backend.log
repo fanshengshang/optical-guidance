@@ -1,0 +1,128 @@
+2026-10-08 14:05:35,471 [INFO] optical-guidance: [App] 初始化数据: model: 手部检测模型, camera: 工位摄像头, targets: 料盒 A/B/C
+2026-10-08 14:05:35,473 [INFO] optical-guidance: [App] Database initialized; DATA_DIR=C:\Users\21449\Desktop\optical-guidance\optical-guidance-data
+2026-10-08 14:06:07,928 [INFO] optical-guidance: [App] 初始化数据: process: 示例工序
+2026-10-08 14:06:07,931 [INFO] optical-guidance: [App] Database initialized; DATA_DIR=C:\Users\21449\Desktop\optical-guidance\optical-guidance-data
+2026-10-08 14:55:10,813 [INFO] optical-guidance: [App] Database initialized; DATA_DIR=C:\Users\21449\Desktop\optical-guidance\optical-guidance-data
+2026-10-08 14:57:03,677 [INFO] optical-guidance: [App] Database initialized; DATA_DIR=C:\Users\21449\Desktop\optical-guidance\optical-guidance-data
+2026-10-09 14:29:12,831 [INFO] optical-guidance: [App] Database initialized; DATA_DIR=C:\Users\21449\Desktop\optical-guidance\optical-guidance-data
+2026-10-09 14:30:41,103 [INFO] optical-guidance: [App] Database initialized; DATA_DIR=C:\Users\21449\Desktop\optical-guidance\optical-guidance-data
+2026-10-09 14:31:41,752 [INFO] optical-guidance: [App] Database initialized; DATA_DIR=C:\Users\21449\Desktop\optical-guidance\optical-guidance-data
+2026-10-09 14:41:33,241 [INFO] optical-guidance: [App] Database initialized; DATA_DIR=C:\Users\21449\Desktop\optical-guidance\optical-guidance-data
+2026-10-09 14:46:12,348 [INFO] optical-guidance: [App] Database initialized; DATA_DIR=C:\Users\21449\Desktop\optical-guidance\optical-guidance-data
+2026-10-09 14:46:27,301 [INFO] optical-guidance: [App] Database initialized; DATA_DIR=C:\Users\21449\Desktop\optical-guidance\optical-guidance-data
+2026-10-09 14:47:41,116 [INFO] optical-guidance: [App] Database initialized; DATA_DIR=C:\Users\21449\Desktop\optical-guidance\optical-guidance-data
+2026-10-09 14:56:09,189 [INFO] optical-guidance: [App] Database initialized; DATA_DIR=C:\Users\21449\Desktop\optical-guidance\optical-guidance-data
+2026-10-09 14:56:24,097 [INFO] optical-guidance: [App] Database initialized; DATA_DIR=C:\Users\21449\Desktop\optical-guidance\optical-guidance-data
+2026-10-09 14:57:22,745 [INFO] optical-guidance: [App] Database initialized; DATA_DIR=C:\Users\21449\Desktop\optical-guidance\optical-guidance-data
+2026-10-09 15:35:43,482 [INFO] optical-guidance: [App] Database initialized; DATA_DIR=C:\Users\21449\Desktop\optical-guidance\optical-guidance-data
+2026-10-09 15:38:00,526 [INFO] optical-guidance: [App] Database initialized; DATA_DIR=C:\Users\21449\Desktop\optical-guidance\optical-guidance-data
+2026-10-09 15:45:46,706 [INFO] optical-guidance: [App] Database initialized; DATA_DIR=C:\Users\21449\Desktop\optical-guidance\optical-guidance-data
+2026-10-09 15:46:00,471 [INFO] optical-guidance: [App] Database initialized; DATA_DIR=C:\Users\21449\Desktop\optical-guidance\optical-guidance-data
+2026-10-09 15:50:08,401 [INFO] optical-guidance: [App] Database initialized; DATA_DIR=C:\Users\21449\Desktop\optical-guidance\optical-guidance-data
+2026-10-09 16:22:59,224 [INFO] optical-guidance: [App] Database initialized; DATA_DIR=C:\Users\21449\Desktop\optical-guidance\optical-guidance-data
+2026-10-09 17:06:16,045 [INFO] optical-guidance: [App] Database initialized; DATA_DIR=C:\Users\21449\Desktop\optical-guidance\optical-guidance-data
+2026-10-09 17:12:05,767 [INFO] optical-guidance: [App] Database initialized; DATA_DIR=C:\Users\21449\Desktop\optical-guidance\optical-guidance-data
+2026-10-09 17:18:01,568 [INFO] optical-guidance: [App] Database initialized; DATA_DIR=C:\Users\21449\Desktop\optical-guidance\optical-guidance-data
+2026-10-09 17:23:31,201 [INFO] optical-guidance: [App] Database initialized; DATA_DIR=C:\Users\21449\Desktop\optical-guidance\optical-guidance-data
+2026-10-09 17:26:46,821 [INFO] optical-guidance: [App] Database initialized; DATA_DIR=C:\Users\21449\Desktop\optical-guidance\optical-guidance-data
+2026-10-09 17:48:00,919 [INFO] optical-guidance: [App] Database initialized; DATA_DIR=C:\Users\21449\Desktop\optical-guidance\optical-guidance-data
+2026-10-09 17:48:10,983 [INFO] optical-guidance: [App] Database initialized; DATA_DIR=C:\Users\21449\Desktop\optical-guidance\optical-guidance-data
+2026-10-09 17:48:44,302 [INFO] optical-guidance: [App] Database initialized; DATA_DIR=C:\Users\21449\Desktop\optical-guidance\optical-guidance-data
+2026-10-09 17:50:13,169 [INFO] optical-guidance: [App] Database initialized; DATA_DIR=C:\Users\21449\Desktop\optical-guidance\optical-guidance-data
+2026-10-09 17:53:20,358 [INFO] optical-guidance: [App] Database initialized; DATA_DIR=C:\Users\21449\Desktop\optical-guidance\optical-guidance-data
+2026-10-09 17:53:32,706 [INFO] optical-guidance: [App] Database initialized; DATA_DIR=C:\Users\21449\Desktop\optical-guidance\optical-guidance-data
+2026-10-09 17:53:43,926 [INFO] optical-guidance: [App] Database initialized; DATA_DIR=C:\Users\21449\Desktop\optical-guidance\optical-guidance-data
+2026-10-09 17:54:32,151 [INFO] optical-guidance: [App] Database initialized; DATA_DIR=C:\Users\21449\Desktop\optical-guidance\optical-guidance-data
+2026-10-09 17:59:59,879 [INFO] optical-guidance: [App] Database initialized; DATA_DIR=C:\Users\21449\Desktop\optical-guidance\optical-guidance-data
+2026-10-09 18:00:48,935 [INFO] optical-guidance: [App] Database initialized; DATA_DIR=C:\Users\21449\Desktop\optical-guidance\optical-guidance-data
+2026-10-09 18:05:13,015 [INFO] optical-guidance: [App] Database initialized; DATA_DIR=C:\Users\21449\Desktop\optical-guidance\optical-guidance-data
+2026-10-09 18:05:42,989 [INFO] optical-guidance: [App] Database initialized; DATA_DIR=C:\Users\21449\Desktop\optical-guidance\optical-guidance-data
+2026-10-09 18:06:29,021 [INFO] optical-guidance: [App] Database initialized; DATA_DIR=C:\Users\21449\Desktop\optical-guidance\optical-guidance-data
+2026-10-09 18:09:17,719 [INFO] optical-guidance: [App] Database initialized; DATA_DIR=C:\Users\21449\Desktop\optical-guidance\optical-guidance-data
+2026-10-14 14:24:04,858 [INFO] optical-guidance: [App] Database initialized; DATA_DIR=C:\Users\21449\Desktop\optical-guidance\optical-guidance-data
+2026-10-14 14:24:31,518 [INFO] optical-guidance: [App] Database initialized; DATA_DIR=C:\Users\21449\Desktop\optical-guidance\optical-guidance-data
+2026-10-14 14:25:37,888 [INFO] optical-guidance: [App] Database initialized; DATA_DIR=C:\Users\21449\Desktop\optical-guidance\optical-guidance-data
+2026-10-14 14:35:58,745 [INFO] optical-guidance: [App] Database initialized; DATA_DIR=C:\Users\21449\Desktop\optical-guidance\optical-guidance-data
+2026-10-14 15:10:11,650 [INFO] optical-guidance: [App] 对账：4 条遗留 running 记录已标记为 aborted
+2026-10-14 15:10:11,653 [INFO] optical-guidance: [App] Database initialized; DATA_DIR=C:\Users\21449\Desktop\optical-guidance\optical-guidance-data
+2026-10-14 15:29:06,392 [INFO] optical-guidance: [App] Database initialized; DATA_DIR=C:\Users\21449\Desktop\optical-guidance\optical-guidance-data
+2026-10-14 15:40:26,004 [INFO] optical-guidance: [App] Database initialized; DATA_DIR=C:\Users\21449\Desktop\optical-guidance\optical-guidance-data
+2026-10-14 15:49:55,856 [INFO] optical-guidance: [App] Database initialized; DATA_DIR=C:\Users\21449\Desktop\optical-guidance\optical-guidance-data
+2026-10-14 16:05:46,622 [INFO] optical-guidance: [App] Database initialized; DATA_DIR=C:\Users\21449\Desktop\optical-guidance\optical-guidance-data
+2026-10-14 16:18:46,691 [INFO] optical-guidance: [App] Database initialized; DATA_DIR=C:\Users\21449\Desktop\optical-guidance\optical-guidance-data
+2026-10-14 16:21:04,363 [INFO] optical-guidance: [App] Database initialized; DATA_DIR=C:\Users\21449\Desktop\optical-guidance\optical-guidance-data
+2026-10-15 14:54:09,516 [INFO] optical-guidance: [App] Database initialized; DATA_DIR=C:\Users\21449\Desktop\optical-guidance\optical-guidance-data
+2026-10-15 15:21:29,903 [ERROR] optical-guidance: Unhandled error: 'NoneType' object has no attribute 'read'
+Traceback (most recent call last):
+  File "C:\Users\21449\Desktop\optical-guidance\.venv\Lib\site-packages\starlette\middleware\errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "C:\Users\21449\Desktop\optical-guidance\.venv\Lib\site-packages\fastapi\telemetry\_asgi.py", line 151, in __call__
+    await self.app(scope, receive, send)
+  File "C:\Users\21449\Desktop\optical-guidance\.venv\Lib\site-packages\starlette\middleware\cors.py", line 91, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "C:\Users\21449\Desktop\optical-guidance\.venv\Lib\site-packages\starlette\middleware\cors.py", line 149, in simple_response
+    await self.app(scope, receive, send)
+  File "C:\Users\21449\Desktop\optical-guidance\.venv\Lib\site-packages\starlette\middleware\exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "C:\Users\21449\Desktop\optical-guidance\.venv\Lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "C:\Users\21449\Desktop\optical-guidance\.venv\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "C:\Users\21449\Desktop\optical-guidance\.venv\Lib\site-packages\fastapi\middleware\asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "C:\Users\21449\Desktop\optical-guidance\.venv\Lib\site-packages\starlette\routing.py", line 676, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "C:\Users\21449\Desktop\optical-guidance\.venv\Lib\site-packages\fastapi\routing.py", line 2786, in app
+    await route.handle(scope, receive, send)
+  File "C:\Users\21449\Desktop\optical-guidance\.venv\Lib\site-packages\fastapi\routing.py", line 1817, in handle
+    await self.original_router.handle(scope, receive, send)
+  File "C:\Users\21449\Desktop\optical-guidance\.venv\Lib\site-packages\fastapi\routing.py", line 2869, in handle
+    await included_router._handle_selected(scope, receive, send)
+  File "C:\Users\21449\Desktop\optical-guidance\.venv\Lib\site-packages\fastapi\routing.py", line 1843, in _handle_selected
+    await original_route.handle(scope, receive, send)
+  File "C:\Users\21449\Desktop\optical-guidance\.venv\Lib\site-packages\fastapi\routing.py", line 1308, in handle
+    await effective_context.app(scope, receive, send)
+  File "C:\Users\21449\Desktop\optical-guidance\.venv\Lib\site-packages\fastapi\routing.py", line 165, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "C:\Users\21449\Desktop\optical-guidance\.venv\Lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "C:\Users\21449\Desktop\optical-guidance\.venv\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "C:\Users\21449\Desktop\optical-guidance\.venv\Lib\site-packages\fastapi\routing.py", line 152, in app
+    await response(scope, receive, send)
+  File "C:\Users\21449\Desktop\optical-guidance\.venv\Lib\site-packages\starlette\responses.py", line 275, in __call__
+    async with create_collapsing_task_group() as task_group:
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\21449\AppData\Local\Programs\Python\Python312\Lib\contextlib.py", line 231, in __aexit__
+    await self.gen.athrow(value)
+  File "C:\Users\21449\Desktop\optical-guidance\.venv\Lib\site-packages\starlette\_utils.py", line 115, in create_collapsing_task_group
+    raise exc from exc.__cause__ or context
+  File "C:\Users\21449\Desktop\optical-guidance\.venv\Lib\site-packages\anyio\_core\_tasks.py", line 327, in _run_coro
+    retval = await self._coro
+             ^^^^^^^^^^^^^^^^
+  File "C:\Users\21449\Desktop\optical-guidance\.venv\Lib\site-packages\starlette\responses.py", line 278, in wrap
+    await func()
+  File "C:\Users\21449\Desktop\optical-guidance\.venv\Lib\site-packages\starlette\responses.py", line 252, in stream_response
+    async for chunk in self.body_iterator:
+  File "C:\Users\21449\Desktop\optical-guidance\.venv\Lib\site-packages\starlette\concurrency.py", line 57, in iterate_in_threadpool
+    yield await anyio.to_thread.run_sync(_next, as_iterator)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\21449\Desktop\optical-guidance\.venv\Lib\site-packages\anyio\to_thread.py", line 65, in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\21449\Desktop\optical-guidance\.venv\Lib\site-packages\anyio\_backends\_asyncio.py", line 2706, in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+  File "C:\Users\21449\Desktop\optical-guidance\.venv\Lib\site-packages\anyio\_backends\_asyncio.py", line 1100, in run
+    result = context.run(func, *args)
+             ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\21449\Desktop\optical-guidance\.venv\Lib\site-packages\starlette\concurrency.py", line 46, in _next
+    return next(iterator)
+           ^^^^^^^^^^^^^^
+  File "C:\Users\21449\Desktop\optical-guidance\backend\app\services\guidance_service.py", line 193, in preview_stream
+    frame = src.read()
+            ^^^^^^^^^^
+  File "C:\Users\21449\Desktop\optical-guidance\backend\app\services\video_service.py", line 107, in read
+    ok, frame = self._cap.read()
+                ^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'read'

@@ -1,0 +1,17 @@
+Collecting opencv-python==5.0.0.93
+  Using cached opencv_python-5.0.0.93-cp37-abi3-win_amd64.whl.metadata (20 kB)
+Collecting numpy>=2 (from opencv-python==5.0.0.93)
+  Using cached numpy-2.5.3-cp312-cp312-win_amd64.whl.metadata (6.6 kB)
+Using cached opencv_python-5.0.0.93-cp37-abi3-win_amd64.whl (44.0 MB)
+Using cached numpy-2.5.3-cp312-cp312-win_amd64.whl (12.6 MB)
+Installing collected packages: numpy, opencv-python
+  Attempting uninstall: numpy
+    Found existing installation: numpy 2.5.3
+    Uninstalling numpy-2.5.3:
+      Successfully uninstalled numpy-2.5.3
+  Attempting uninstall: opencv-python
+    Found existing installation: opencv-python 4.14.0.94
+    Uninstalling opencv-python-4.14.0.94:
+      Successfully uninstalled opencv-python-4.14.0.94
+
+Successfully installed numpy-2.5.3 opencv-python-5.0.0.93

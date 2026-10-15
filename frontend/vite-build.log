@@ -1,0 +1,37 @@
+[36mvite v8.3.3 [32mbuilding client environment for production...[36m[39m
+transforming...
+✓ 3779 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                              0.55 kB │ gzip:   0.34 kB
+dist/assets/index-BObjBLB1.css               0.50 kB │ gzip:   0.32 kB
+dist/assets/context-CmYuAmlx.js              1.57 kB │ gzip:   0.86 kB
+dist/assets/ModelPage-6K3Dd6kj.js            3.26 kB │ gzip:   1.59 kB
+dist/assets/ProjectorPage-Dejfn4I8.js        3.30 kB │ gzip:   1.48 kB
+dist/assets/alert-1DganGLm.js                6.40 kB │ gzip:   2.70 kB
+dist/assets/popconfirm-aQqEmFDO.js           7.84 kB │ gzip:   3.07 kB
+dist/assets/descriptions-BAhZmKmS.js         7.88 kB │ gzip:   2.79 kB
+dist/assets/MonitoringPage-Bzows6_t.js      20.43 kB │ gzip:   8.14 kB
+dist/assets/TargetPage-BZA4i7PU.js          33.17 kB │ gzip:  11.60 kB
+dist/assets/ProcessPage-CtNapHPR.js         34.11 kB │ gzip:  10.35 kB
+dist/assets/RecordsPage-DCDlYpcC.js         53.19 kB │ gzip:  19.05 kB
+dist/assets/api-DIsIUzc-.js                 60.75 kB │ gzip:  22.41 kB
+dist/assets/modal-DgHJVYwn.js               63.13 kB │ gzip:  22.21 kB
+dist/assets/index-CCPxlux9.js              100.51 kB │ gzip:  33.96 kB
+dist/assets/table-D-4G9hrU.js              200.84 kB │ gzip:  62.48 kB
+dist/assets/typography-DEQnmVh1.js         231.40 kB │ gzip:  72.55 kB
+dist/assets/button-B6OL43Hf.js             453.68 kB │ gzip: 149.81 kB
+dist/assets/CalibrationPage-Do-bkdF5.js  1,139.22 kB │ gzip: 378.97 kB
+
+[33m[plugin builtin:vite-reporter] 
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.[39m
+[32m✓ built in 5.56s[39m
+[33m[33m[PLUGIN_TIMINGS] [0mJavaScript callbacks ran for 4.3s of this 5.5s build (78%).
+The slowest callbacks, timed inside each callback (the wait before a callback starts is excluded, the time it awaits is included):
+  - plugin vite:css-post renderChunk (77%, 4.3s, 17 calls)
+Additional callback time came from callbacks under 1s.
+See https://rolldown.rs/reference/InputOptions.checks#bundlertimings for more details.
+[39m

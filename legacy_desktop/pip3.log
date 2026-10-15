@@ -1,0 +1,10 @@
+Collecting opencv-python<5
+  Using cached opencv_python-4.14.0.94-cp37-abi3-win_amd64.whl.metadata (20 kB)
+Requirement already satisfied: numpy>=2 in C:\Users\21449\Desktop\optical-guidance\.venv\Lib\site-packages (from opencv-python<5) (2.5.3)
+Using cached opencv_python-4.14.0.94-cp37-abi3-win_amd64.whl (41.2 MB)
+Installing collected packages: opencv-python
+  Attempting uninstall: opencv-python
+    Found existing installation: opencv-python 5.0.0.93
+    Uninstalling opencv-python-5.0.0.93:
+      Successfully uninstalled opencv-python-5.0.0.93
+Successfully installed opencv-python-4.14.0.94
