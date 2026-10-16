@@ -94,6 +94,8 @@ class ProcessStepSchema(BaseModel):
     name: str = ""
     # 投影屏上引导工人的动作提示词（如「请拿取电容盒，放掌心停一下」），可留空
     instruction: str = ""
+    # 本步骤的停留时长（秒）：手在该取料位停多久算「拿对」。留空则回落工序/全局 dwell_sec
+    dwell_sec: Optional[float] = None
 
 
 class ProcessCreate(BaseModel):
@@ -102,6 +104,11 @@ class ProcessCreate(BaseModel):
     steps: List[ProcessStepSchema] = Field(default_factory=list)
     # 工序级引导参数覆盖（留空继承全局默认）；字段见 core/guide_config.py
     guide_config: Optional[Dict[str, Any]] = None
+    # 投影开始/结束提示：启动/完成时在投影屏上显示，停留对应秒数
+    start_hint: Optional[str] = None
+    start_hint_sec: Optional[float] = 3.0
+    end_hint: Optional[str] = None
+    end_hint_sec: Optional[float] = 3.0
     note: Optional[str] = None
     created_at: Optional[str] = None
 
@@ -111,6 +118,10 @@ class ProcessResponse(BaseModel):
     name: str
     steps: List[ProcessStepSchema]
     guide_config: Optional[Dict[str, Any]] = None
+    start_hint: Optional[str] = None
+    start_hint_sec: Optional[float] = 3.0
+    end_hint: Optional[str] = None
+    end_hint_sec: Optional[float] = 3.0
     note: Optional[str] = None
     created_at: str
 
@@ -165,6 +176,7 @@ class ProjectorStateResponse(BaseModel):
     hand_xy: Optional[List[float]] = None
     progress: Optional[float] = None         # 手在目标位的停留进度 0..1，用于进度环
     flash: Optional[str] = None
+    announce: Optional[Dict[str, Any]] = None  # 开始/结束提示 {text, tone}
     message: str = ""
     seq: int = 0
     # ── 引导动画参数（来自有效引导配置，管理人员可在「系统设置 / 工序编排」里调） ──

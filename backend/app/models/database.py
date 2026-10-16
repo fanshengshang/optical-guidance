@@ -97,6 +97,11 @@ class ProcessModel(Base):
     steps = Column(JSON, default=list)
     # 工序级引导参数覆盖（留空即继承系统全局默认）；字段见 core/guide_config.py
     guide_config = Column(JSON, nullable=True)
+    # 投影开始/结束提示（文案 + 停留秒数），启动/完成时在投影屏上显示
+    start_hint = Column(Text, nullable=True)
+    start_hint_sec = Column(Float, nullable=True, default=3.0)
+    end_hint = Column(Text, nullable=True)
+    end_hint_sec = Column(Float, nullable=True, default=3.0)
     note = Column(Text, nullable=True)
     created_at = Column(String(32), nullable=False, default="")
 
@@ -178,7 +183,11 @@ def _ensure_columns():
                     ("color", "VARCHAR(16) DEFAULT '#38bdf8'"),
                     ("enabled", "BOOLEAN DEFAULT 1")],
         "runs": [("wrong_count", "INTEGER DEFAULT 0"), ("done_steps", "INTEGER DEFAULT 0")],
-        "processes": [("guide_config", "JSON")],
+        "processes": [("guide_config", "JSON"),
+                      ("start_hint", "TEXT"),
+                      ("start_hint_sec", "FLOAT DEFAULT 3.0"),
+                      ("end_hint", "TEXT"),
+                      ("end_hint_sec", "FLOAT DEFAULT 3.0")],
         "model_registry": [("meta", "JSON")],
         "calibrations": [("warning", "VARCHAR(512) DEFAULT ''")],
     }

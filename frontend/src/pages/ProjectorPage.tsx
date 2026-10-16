@@ -14,13 +14,13 @@ const POLL_MS = 60
 const FILL: Record<string, string> = {
   green: 'rgba(22,163,74,0.95)',
   red: 'rgba(220,38,38,0.95)',
-  hint: 'rgba(20,83,45,0.85)',
+  hint: 'rgba(37,99,235,0.85)',
   warn: 'rgba(120,53,15,0.75)',
 }
 const STROKE: Record<string, string> = {
   green: '#22c55e',
   red: '#dc2626',
-  hint: '#22c55e',
+  hint: '#3b82f6',
   warn: '#f59e0b',
 }
 
@@ -110,6 +110,37 @@ const ProjectorPage: React.FC = () => {
   if (mode === 'white') {
     return <div style={{ position: 'fixed', inset: 0, background: '#fff' }} />
   }
+  // 开始/结束提示：全屏大字
+  if (mode === 'announce' && state?.announce) {
+    const tone = state.announce.tone === 'end' ? '#16a34a' : '#2563eb'
+    return (
+      <div
+        style={{
+          position: 'fixed',
+          inset: 0,
+          background: '#0d1013',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          overflow: 'hidden',
+        }}
+      >
+        <div
+          style={{
+            maxWidth: '86%',
+            textAlign: 'center',
+            color: tone,
+            fontSize: 72,
+            fontWeight: 700,
+            letterSpacing: 6,
+            lineHeight: 1.35,
+          }}
+        >
+          {state.announce.text}
+        </div>
+      </div>
+    )
+  }
 
   const flashColor =
     state?.flash === 'green'
@@ -132,19 +163,15 @@ const ProjectorPage: React.FC = () => {
   // 手当前落在的取料位（进度环画在这一格上）
   const handTarget = hand ? targets.find((t) => contains(t, hand[0], hand[1])) : undefined
 
-  // 引导箭头：从手位置指向「当前该取」的那一格
+  // 引导箭头：固定在「当前该取」那一格的正上方，竖直向下指（不跟随手）
   const wantTarget = targets.find((t) => colors[t.id] === 'hint')
   const arrow =
-    arrowOn && hand && wantTarget
+    arrowOn && wantTarget
       ? (() => {
-          const r = targetRadius(wantTarget) + 10
-          const dx = wantTarget.x - hand[0]
-          const dy = wantTarget.y - hand[1]
-          const len = Math.hypot(dx, dy) || 1
-          // 终点缩到圆的边缘，避免箭头戳进圆圈里
-          const ex = wantTarget.x - (dx / len) * r
-          const ey = wantTarget.y - (dy / len) * r
-          return { x1: hand[0], y1: hand[1], x2: ex, y2: ey }
+          const r = targetRadius(wantTarget)
+          const tipY = wantTarget.y - r - 14          // 终点停在料位顶部边缘上方
+          const topY = tipY - 64                     // 箭头总长 64
+          return { x1: wantTarget.x, y1: topY, x2: wantTarget.x, y2: tipY }
         })()
       : null
 

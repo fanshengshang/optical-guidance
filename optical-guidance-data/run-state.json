@@ -1,8 +1,8 @@
 {
-  "started_at": 1792047241.331399,
-  "backend_pid": 37408,
-  "frontend_pid": 20888,
-  "backend_listen_pid": 35920,
-  "frontend_listen_pid": 20888,
-  "projector_browser_pid": 35028
+  "started_at": 1792127319.8264365,
+  "backend_pid": 22800,
+  "frontend_pid": 14448,
+  "backend_listen_pid": 21272,
+  "frontend_listen_pid": 14448,
+  "projector_browser_pid": 35784
 }

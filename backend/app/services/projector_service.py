@@ -29,6 +29,7 @@ class ProjectorService:
             "progress": None,
             "flash": None,
             "message": "等待启动",
+            "announce": None,          # 开始/结束提示 {text, tone: 'start'|'end'}
             "seq": 0,
             # ── 引导动画参数（前端据此渲染脉冲 / 进度环 / 箭头） ──
             "pulse_enabled": guide_config.DEFAULT["pulse_enabled"],
@@ -57,7 +58,15 @@ class ProjectorService:
 
     def set_idle(self, message: str = "等待启动"):
         self._bump(mode="idle", colors={}, hand_xy=None, progress=None, flash=None,
-                   step_text="", instruction="", step_index=0, step_total=0, message=message)
+                   step_text="", instruction="", step_index=0, step_total=0,
+                   announce=None, message=message)
+
+    def set_announce(self, text: str, tone: str = "start", message: str = ""):
+        """开始/结束提示：在投影屏上显示一段大字文案（tone=start 蓝 / end 绿）。"""
+        self._bump(mode="announce", announce={"text": text, "tone": tone},
+                   colors={}, hand_xy=None, progress=None, flash=None,
+                   step_text="", instruction="", step_index=0, step_total=0,
+                   message=message or text)
 
     def update_guide(self, targets, colors, step_index, step_total,
                      step_text, hand_xy, flash=None, message="",
@@ -70,7 +79,7 @@ class ProjectorService:
             instruction=instruction or "",
             hand_xy=list(hand_xy) if hand_xy else None,
             progress=(None if progress is None else round(float(progress), 3)),
-            flash=flash, message=message)
+            flash=flash, message=message, announce=None)
         # 动画参数只在有效配置存在时覆盖，否则沿用上一次 / 默认，避免闪烁
         if guide:
             changes.update(

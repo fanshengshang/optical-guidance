@@ -126,3 +126,11 @@ Traceback (most recent call last):
     ok, frame = self._cap.read()
                 ^^^^^^^^^^^^^^
 AttributeError: 'NoneType' object has no attribute 'read'
+2026-10-16 11:58:23,297 [INFO] optical-guidance: [App] Database initialized; DATA_DIR=C:\Users\21449\Desktop\optical-guidance\optical-guidance-data
+2026-10-16 12:00:45,242 [INFO] optical-guidance: [App] Database initialized; DATA_DIR=C:\Users\21449\Desktop\optical-guidance\optical-guidance-data
+2026-10-16 12:08:30,055 [INFO] optical-guidance: [App] Database initialized; DATA_DIR=C:\Users\21449\Desktop\optical-guidance\optical-guidance-data
+2026-10-16 12:08:30,056 [INFO] optical-guidance: [App] Shutting down
+2026-10-16 12:47:24,324 [INFO] optical-guidance: [App] 对账：1 条遗留 running 记录已标记为 aborted
+2026-10-16 12:47:24,327 [INFO] optical-guidance: [App] Database initialized; DATA_DIR=C:\Users\21449\Desktop\optical-guidance\optical-guidance-data
+2026-10-16 13:02:34,769 [INFO] optical-guidance: [App] Database initialized; DATA_DIR=C:\Users\21449\Desktop\optical-guidance\optical-guidance-data
+2026-10-16 13:08:41,028 [INFO] optical-guidance: [App] Database initialized; DATA_DIR=C:\Users\21449\Desktop\optical-guidance\optical-guidance-data

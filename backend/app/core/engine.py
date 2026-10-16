@@ -46,15 +46,16 @@ class Target:
 
 
 class Step:
-    __slots__ = ("order", "target_id", "name", "target_name", "instruction")
+    __slots__ = ("order", "target_id", "name", "target_name", "instruction", "dwell_sec")
 
     def __init__(self, order: int, target_id: str, name: str = "", target_name: str = "",
-                 instruction: str = ""):
+                 instruction: str = "", dwell_sec: Optional[float] = None):
         self.order = order
         self.target_id = target_id
         self.name = name
         self.target_name = target_name
         self.instruction = instruction
+        self.dwell_sec = dwell_sec
 
 
 class GuidanceEngine:
@@ -99,6 +100,17 @@ class GuidanceEngine:
             return ""
         return (self.steps[self.step_index].instruction or "").strip()
 
+    def current_dwell(self) -> float:
+        """当前步的停留时长：步骤单独设了就优先用，否则回落全局 dwell。"""
+        if self.steps:
+            step_dwell = self.steps[self.step_index].dwell_sec
+            if step_dwell is not None:
+                try:
+                    return max(0.0, float(step_dwell))
+                except (TypeError, ValueError):
+                    pass
+        return self.dwell
+
     def at_end(self) -> bool:
         return bool(self.steps) and self.step_index >= len(self.steps) - 1
 
@@ -135,6 +147,7 @@ class GuidanceEngine:
         """
         now = time.monotonic()
         want = self.target_id
+        dwell = self.current_dwell()
         colors: Dict[str, Optional[str]] = {tid: None for tid in self.targets}
         if want:
             colors[want] = "hint"
@@ -154,7 +167,7 @@ class GuidanceEngine:
             if (self.detect_mis_touch and prev is not None and prev == want
                     and not self._satisfied):
                 stayed = now - self._enter_at.get(prev, now)
-                if self.mis_touch_sec <= stayed < self.dwell:
+                if self.mis_touch_sec <= stayed < dwell:
                     event = ("mis_touch", prev)
             if self._satisfied and self.advance():
                 event = ("advance", None)
@@ -178,8 +191,8 @@ class GuidanceEngine:
                 self._enter_at.clear()
             started = self._enter_at.setdefault(hand_target, now)
             elapsed = now - started
-            progress = min(1.0, elapsed / self.dwell) if self.dwell > 0 else 1.0
-            if elapsed >= self.dwell:
+            progress = min(1.0, elapsed / dwell) if dwell > 0 else 1.0
+            if elapsed >= dwell:
                 if hand_target == want:
                     colors[hand_target] = "green"
                     self._wrong_hold = None

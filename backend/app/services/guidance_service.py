@@ -25,8 +25,9 @@ from .hand_service import build_detector
 from .projector_service import projector_service
 from .video_service import encode_jpeg, placeholder_frame
 
+# 语义：hint = 当前该取（蓝），green = 拿对（绿），red = 拿错（红），warn = 误触（橙）
 COLOR_BGR = {"green": (74, 222, 128), "red": (68, 68, 239),
-             "hint": (74, 160, 60), "warn": (120, 180, 220), None: (160, 160, 160)}
+             "hint": (246, 130, 59), "warn": (120, 180, 220), None: (160, 160, 160)}
 
 # 连续读不到帧多久就判定「取流异常」（不再是"运行中"的假象）
 NO_FRAME_TIMEOUT_SEC = 2.0
@@ -53,6 +54,11 @@ class GuidanceService:
         self._process_id: Optional[str] = None
         self._process_name = ""
         self._camera_id: Optional[str] = None
+        # 投影开始/结束提示（本次运行沿用）
+        self._start_hint = ""
+        self._start_hint_sec = 3.0
+        self._end_hint = ""
+        self._end_hint_sec = 3.0
 
         self._H = None
         self._Hinv = None
@@ -69,6 +75,7 @@ class GuidanceService:
         self._no_frame_since: Optional[float] = None
         self._hand_detected = False
         self._hand_xy = None
+        self._hand_cam_last = None
         self._colors: Dict[str, Optional[str]] = {}
         self._last_event: Optional[str] = None
         self._hand_target: Optional[str] = None
@@ -266,7 +273,8 @@ class GuidanceService:
                     steps.append(Step(len(steps), tid,
                                       s.get("name") or tmap[tid].name,
                                       s.get("target_name") or tmap[tid].name,
-                                      s.get("instruction") or ""))
+                                      s.get("instruction") or "",
+                                      s.get("dwell_sec")))
                 if not steps:
                     return {"ok": False, "reason": "工序里没有可用的取料位步骤"}
 
@@ -296,6 +304,10 @@ class GuidanceService:
                 self._process_id = proc.id
                 self._process_name = proc.name
                 self._camera_id = cam.id
+                self._start_hint = (proc.start_hint or "").strip()
+                self._start_hint_sec = float(proc.start_hint_sec or 3.0)
+                self._end_hint = (proc.end_hint or "").strip()
+                self._end_hint_sec = float(proc.end_hint_sec or 3.0)
                 self._wrong_count = 0
                 self._last_event = None
                 # 上一轮的 fps/画面不能带到新一轮（否则启动瞬间显示陈旧数据）
@@ -375,6 +387,15 @@ class GuidanceService:
         return {"ok": True}
 
     # ─────────────── 主循环 ───────────────
+    def _wait_announce(self, text: str, tone: str, sec: float):
+        """显示一段开始/结束提示并停留 sec 秒，期间可被 stop_evt 立即打断。"""
+        if not text or sec <= 0:
+            return
+        projector_service.set_announce(text, tone)
+        deadline = time.monotonic() + sec
+        while not self._stop_evt.is_set() and time.monotonic() < deadline:
+            time.sleep(0.05)
+
     def _loop(self, token, model_rel):
         # 检测器按模型路径进程内缓存（见 hand_service.build_detector），
         # 这里拿到的是同一个实例，跨轮复用、不在运行结束关它。
@@ -384,9 +405,17 @@ class GuidanceService:
                 self._detector = detector
                 self._message = "运行中"
         try:
+            # 启动提示：先显示开始文案，再进入判定循环
+            self._wait_announce(self._start_hint, "start", self._start_hint_sec)
+            if self._stop_evt.is_set():
+                return
+
             last_ts = time.monotonic()
             frames = 0
             fps_t0 = time.monotonic()
+            # 检测跳帧：每 N 帧才跑一次检测，中间帧沿用上次的手位置
+            detect_every = max(1, int(self._guide.get("detect_every_n_frames", 1) or 1))
+            frame_no = 0
             while not self._stop_evt.is_set():
                 now = time.monotonic()
                 frame = self._source.read() if self._source is not None else None
@@ -409,12 +438,17 @@ class GuidanceService:
 
                 hand_cam = None
                 hand_proj = None
-                try:
-                    hand_cam = detector.detect(frame)
-                except Exception:
-                    hand_cam = None
+                # 跳帧：只在第 0、N、2N… 帧跑检测，其余帧沿用上一帧的手位置
+                if frame_no % detect_every == 0:
+                    try:
+                        hand_cam = detector.detect(frame)
+                    except Exception:
+                        hand_cam = None
+                else:
+                    hand_cam = self._hand_cam_last
                 if hand_cam is not None and self._Hinv is not None:
                     hand_proj = cam_to_proj(hand_cam, self._Hinv)
+                self._hand_cam_last = hand_cam
 
                 eng = self._engine
                 if eng is not None:
@@ -454,22 +488,23 @@ class GuidanceService:
                     self._seq += 1
 
                 frames += 1
+                frame_no += 1
                 if now - fps_t0 >= 1.0:
                     self._fps = frames / (now - fps_t0)
                     frames = 0
                     fps_t0 = now
                 last_ts = now
 
-                # 整条工序走完 -> 自动结束本次运行。否则记录永远停在 total-1，
-                # 而且要操作员手动点「停止」才算完成。
+                # 整条工序走完 -> 先显示结束提示，再自动结束本次运行。
                 if eng is not None and eng.at_end() and eng.satisfied:
+                    self._message = "工序已完成"
+                    self._wait_announce(self._end_hint, "end", self._end_hint_sec)
                     projector_service.update_guide(
                         targets=[t.to_dict() for t in eng.targets.values()],
                         colors=colors, step_index=eng.step_index, step_total=eng.step_total,
                         step_text=eng.step_text(), instruction=eng.step_instruction(),
                         hand_xy=hand_proj, progress=1.0,
                         flash="green", message="工序已完成", guide=self._guide)
-                    self._message = "工序已完成"
                     break
 
                 time.sleep(0.005)

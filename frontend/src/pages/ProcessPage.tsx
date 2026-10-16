@@ -6,6 +6,7 @@ import {
   Divider,
   Form,
   Input,
+  InputNumber,
   Modal,
   Popconfirm,
   Select,
@@ -66,7 +67,15 @@ const ProcessPage: React.FC = () => {
   const openCreate = () => {
     setEditing(null)
     form.resetFields()
-    form.setFieldsValue({ name: '', note: '', steps: [] })
+    form.setFieldsValue({
+      name: '',
+      note: '',
+      steps: [],
+      startHint: '',
+      startHintSec: 3,
+      endHint: '',
+      endHintSec: 3,
+    })
     setUseCustom(false)
     setCfg({})
     setOpen(true)
@@ -78,6 +87,10 @@ const ProcessPage: React.FC = () => {
       name: p.name,
       note: p.note ?? '',
       steps: p.steps.map((s) => ({ ...s })),
+      startHint: p.startHint ?? '',
+      startHintSec: p.startHintSec ?? 3,
+      endHint: p.endHint ?? '',
+      endHintSec: p.endHintSec ?? 3,
     })
     const has = Boolean(p.guideConfig && Object.keys(p.guideConfig).length)
     setUseCustom(has)
@@ -95,13 +108,17 @@ const ProcessPage: React.FC = () => {
   }
 
   const handleOk = async () => {
-    let values: { name: string; note?: string; steps?: ProcessStep[] }
+    let values: {
+      name: string
+      note?: string
+      steps?: ProcessStep[]
+      startHint?: string
+      startHintSec?: number
+      endHint?: string
+      endHintSec?: number
+    }
     try {
-      values = (await form.validateFields()) as {
-        name: string
-        note?: string
-        steps?: ProcessStep[]
-      }
+      values = (await form.validateFields()) as typeof values
     } catch {
       return
     }
@@ -111,11 +128,16 @@ const ProcessPage: React.FC = () => {
       targetName: s.targetName,
       name: s.name,
       instruction: s.instruction ?? '',
+      dwellSec: s.dwellSec ?? null,
     }))
     const payload = {
       name: values.name,
       note: values.note ?? null,
       steps,
+      startHint: values.startHint ?? null,
+      startHintSec: values.startHintSec ?? 3,
+      endHint: values.endHint ?? null,
+      endHintSec: values.endHintSec ?? 3,
       // 开启自定义才写覆盖，否则 null → 运行时继承全局默认
       guideConfig: useCustom ? cfg : null,
     }
@@ -254,15 +276,33 @@ const ProcessPage: React.FC = () => {
           <Form.Item name="note" label="备注">
             <Input.TextArea rows={2} placeholder="可选" />
           </Form.Item>
-          <Form.Item label="步骤（按顺序）">
+          <Form.Item label="步骤（按顺序取料）" style={{ marginBottom: 8 }}>
             <Form.List name="steps">
               {(fields, { add, remove }) => (
                 <>
+                  {fields.length > 0 && (
+                    <div
+                      style={{
+                        display: 'flex',
+                        gap: 8,
+                        padding: '4px 12px',
+                        color: '#8c8c8c',
+                        fontSize: 12,
+                        marginBottom: 4,
+                      }}
+                    >
+                      <span style={{ width: 180, flex: 'none' }}>取料位</span>
+                      <span style={{ width: 160, flex: 'none' }}>步骤名</span>
+                      <span style={{ width: 100, flex: 'none' }}>停留秒数</span>
+                      <span style={{ flex: 1 }}>提示词</span>
+                      <span style={{ width: 48, flex: 'none' }} />
+                    </div>
+                  )}
                   {fields.map((field) => (
                     <div
                       key={field.key}
                       style={{
-                        border: '1px solid #303030',
+                        border: '1px solid #e5e5e5',
                         borderRadius: 8,
                         padding: '8px 12px',
                         marginBottom: 8,
@@ -291,7 +331,20 @@ const ProcessPage: React.FC = () => {
                           rules={[{ required: true, message: '请输入步骤名' }]}
                           style={{ marginBottom: 4 }}
                         >
-                          <Input style={{ width: 180 }} placeholder="步骤名" />
+                          <Input style={{ width: 160 }} placeholder="步骤名" />
+                        </Form.Item>
+                        <Form.Item
+                          {...field}
+                          name={[field.name, 'dwellSec']}
+                          style={{ marginBottom: 4 }}
+                        >
+                          <InputNumber
+                            style={{ width: 100 }}
+                            min={0.02}
+                            max={2}
+                            step={0.01}
+                            placeholder="默认"
+                          />
                         </Form.Item>
                         <Button danger onClick={() => remove(field.name)}>
                           删除
@@ -309,7 +362,9 @@ const ProcessPage: React.FC = () => {
                     </div>
                   ))}
                   <Button
-                    onClick={() => add({ targetId: undefined, targetName: '', name: '', instruction: '' })}
+                    onClick={() =>
+                      add({ targetId: undefined, targetName: '', name: '', instruction: '', dwellSec: null })
+                    }
                   >
                     添加步骤
                   </Button>
@@ -317,6 +372,26 @@ const ProcessPage: React.FC = () => {
               )}
             </Form.List>
           </Form.Item>
+
+          <Divider plain style={{ marginTop: 4 }}>
+            投影提示
+          </Divider>
+          <Space align="start" style={{ display: 'flex', flexWrap: 'wrap' }}>
+            <Form.Item name="startHint" label="开始提示（启动时显示，可留空）" style={{ marginBottom: 8 }}>
+              <Input style={{ width: 300 }} placeholder="例如：准备开始，请就位" />
+            </Form.Item>
+            <Form.Item name="startHintSec" label="停留秒数" style={{ marginBottom: 8 }}>
+              <InputNumber min={1} max={30} step={1} style={{ width: 90 }} />
+            </Form.Item>
+          </Space>
+          <Space align="start" style={{ display: 'flex', flexWrap: 'wrap' }}>
+            <Form.Item name="endHint" label="结束提示（完成时显示，可留空）" style={{ marginBottom: 8 }}>
+              <Input style={{ width: 300 }} placeholder="例如：工序完成，辛苦了" />
+            </Form.Item>
+            <Form.Item name="endHintSec" label="停留秒数" style={{ marginBottom: 8 }}>
+              <InputNumber min={1} max={30} step={1} style={{ width: 90 }} />
+            </Form.Item>
+          </Space>
 
           <Divider plain style={{ marginTop: 4 }}>
             引导参数

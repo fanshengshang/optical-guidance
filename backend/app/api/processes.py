@@ -26,6 +26,7 @@ def _steps_to_dict(payload: ProcessCreate) -> list:
             "target_name": s.target_name,
             "name": s.name,
             "instruction": getattr(s, "instruction", "") or "",
+            "dwell_sec": getattr(s, "dwell_sec", None),
         })
     return out
 
@@ -50,6 +51,10 @@ def create_process(payload: ProcessCreate, db: Session = Depends(get_db)):
         name=payload.name.strip(),
         steps=_steps_to_dict(payload),
         guide_config=gc.sanitize(payload.guide_config) or None,
+        start_hint=payload.start_hint,
+        start_hint_sec=payload.start_hint_sec,
+        end_hint=payload.end_hint,
+        end_hint_sec=payload.end_hint_sec,
         note=payload.note,
         created_at=payload.created_at or datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
     )
@@ -67,6 +72,10 @@ def update_process(process_id: str, payload: ProcessCreate, db: Session = Depend
     row.name = payload.name.strip()
     row.steps = _steps_to_dict(payload)
     row.guide_config = gc.sanitize(payload.guide_config) or None
+    row.start_hint = payload.start_hint
+    row.start_hint_sec = payload.start_hint_sec
+    row.end_hint = payload.end_hint
+    row.end_hint_sec = payload.end_hint_sec
     row.note = payload.note
     db.commit()
     db.refresh(row)

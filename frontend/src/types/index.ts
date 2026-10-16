@@ -49,6 +49,8 @@ export interface ProcessStep {
   name: string
   /** 投影屏引导工人的动作提示词（可留空） */
   instruction?: string
+  /** 本步骤停留时长（秒），留空则回落工序/全局 dwell */
+  dwellSec?: number | null
 }
 
 export interface ProcessItem {
@@ -57,6 +59,11 @@ export interface ProcessItem {
   steps: ProcessStep[]
   /** 工序级引导参数覆盖（留空则继承全局默认）；键为 camelCase */
   guideConfig?: Record<string, unknown> | null
+  /** 投影开始/结束提示 */
+  startHint?: string | null
+  startHintSec?: number | null
+  endHint?: string | null
+  endHintSec?: number | null
   note?: string | null
   createdAt: string
 }
@@ -144,6 +151,8 @@ export interface ProjectorState {
   /** 手在目标位的停留进度 0..1，用于进度环 */
   progress?: number | null
   flash?: string | null
+  /** 开始/结束提示 {text, tone: 'start'|'end'} */
+  announce?: { text: string; tone: string } | null
   message: string
   seq: number
   // 引导动画参数（来自有效引导配置）
