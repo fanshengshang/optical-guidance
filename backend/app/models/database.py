@@ -118,6 +118,7 @@ class RunModel(Base):
     total_steps = Column(Integer, nullable=False, default=0)
     done_steps = Column(Integer, nullable=False, default=0)
     wrong_count = Column(Integer, nullable=False, default=0)
+    cycles = Column(Integer, nullable=False, default=0)   # 已完成的循环轮数（循环模式）
     started_at = Column(String(32), nullable=False, default="")
     ended_at = Column(String(32), nullable=True)
     created_at = Column(String(32), nullable=False, default="")
@@ -134,9 +135,10 @@ class EventModel(Base):
     id = Column(String(64), primary_key=True)
     run_id = Column(String(64), ForeignKey("runs.id", ondelete="CASCADE"), nullable=False, index=True)
     step_index = Column(Integer, nullable=False, default=0)
+    cycle = Column(Integer, nullable=False, default=1)     # 事件属于第几轮循环（从 1 开始）
     target_id = Column(String(64), nullable=True)
     target_name = Column(String(128), nullable=False, default="")
-    result = Column(String(16), nullable=False, default="ok")   # ok / wrong / advance
+    result = Column(String(16), nullable=False, default="ok")   # ok / wrong / wrong_order / mis_touch / cycle_done
     detail = Column(String(255), nullable=False, default="")
     # 相对 DATA_DIR 的抓拍路径
     snapshot_path = Column(String(512), nullable=True)
@@ -182,7 +184,9 @@ def _ensure_columns():
         "targets": [("w", "FLOAT DEFAULT 160"), ("h", "FLOAT DEFAULT 160"),
                     ("color", "VARCHAR(16) DEFAULT '#38bdf8'"),
                     ("enabled", "BOOLEAN DEFAULT 1")],
-        "runs": [("wrong_count", "INTEGER DEFAULT 0"), ("done_steps", "INTEGER DEFAULT 0")],
+        "runs": [("wrong_count", "INTEGER DEFAULT 0"), ("done_steps", "INTEGER DEFAULT 0"),
+                 ("cycles", "INTEGER DEFAULT 0")],
+        "events": [("cycle", "INTEGER DEFAULT 1")],
         "processes": [("guide_config", "JSON"),
                       ("start_hint", "TEXT"),
                       ("start_hint_sec", "FLOAT DEFAULT 3.0"),

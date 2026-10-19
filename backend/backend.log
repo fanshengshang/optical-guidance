@@ -134,3 +134,13 @@ AttributeError: 'NoneType' object has no attribute 'read'
 2026-10-16 12:47:24,327 [INFO] optical-guidance: [App] Database initialized; DATA_DIR=C:\Users\21449\Desktop\optical-guidance\optical-guidance-data
 2026-10-16 13:02:34,769 [INFO] optical-guidance: [App] Database initialized; DATA_DIR=C:\Users\21449\Desktop\optical-guidance\optical-guidance-data
 2026-10-16 13:08:41,028 [INFO] optical-guidance: [App] Database initialized; DATA_DIR=C:\Users\21449\Desktop\optical-guidance\optical-guidance-data
+2026-10-19 10:22:07,398 [INFO] optical-guidance: [App] Database initialized; DATA_DIR=C:\Users\21449\Desktop\optical-guidance\optical-guidance-data
+2026-10-19 10:22:25,584 [INFO] optical-guidance: [App] Database initialized; DATA_DIR=C:\Users\21449\Desktop\optical-guidance\optical-guidance-data
+2026-10-19 10:22:48,344 [INFO] optical-guidance: [App] Database initialized; DATA_DIR=C:\Users\21449\Desktop\optical-guidance\optical-guidance-data
+2026-10-19 10:26:02,930 [INFO] optical-guidance: [App] Database initialized; DATA_DIR=C:\Users\21449\Desktop\optical-guidance\optical-guidance-data
+2026-10-19 10:46:30,870 [INFO] optical-guidance: [App] Database initialized; DATA_DIR=C:\Users\21449\Desktop\optical-guidance\optical-guidance-data
+2026-10-19 10:47:59,016 [INFO] optical-guidance: [App] Database initialized; DATA_DIR=C:\Users\21449\Desktop\optical-guidance\optical-guidance-data
+2026-10-19 10:51:31,984 [INFO] optical-guidance: [App] Database initialized; DATA_DIR=C:\Users\21449\Desktop\optical-guidance\optical-guidance-data
+2026-10-19 10:56:42,475 [INFO] optical-guidance: [App] 对账：1 条遗留 running 记录已标记为 aborted
+2026-10-19 10:56:42,478 [INFO] optical-guidance: [App] Database initialized; DATA_DIR=C:\Users\21449\Desktop\optical-guidance\optical-guidance-data
+2026-10-19 11:09:36,610 [INFO] optical-guidance: [App] Database initialized; DATA_DIR=C:\Users\21449\Desktop\optical-guidance\optical-guidance-data

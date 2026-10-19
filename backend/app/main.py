@@ -5,6 +5,7 @@
 """
 import logging
 import sys
+from logging.handlers import RotatingFileHandler
 from contextlib import asynccontextmanager
 from pathlib import Path
 
@@ -27,14 +28,16 @@ from .models.database import init_db, SessionLocal, reconcile_stale_runs
 from .services.guidance_service import guidance_service
 from .services.video_service import video_manager
 
-# 日志同时落一份 UTF-8 文件，规避 Windows 控制台 GBK 乱码
+# 日志同时落一份 UTF-8 文件，规避 Windows 控制台 GBK 乱码；
+# 用 RotatingFileHandler 防止 backend.log 无限增长。
 LOG_FILE = Path(config.BASE_DIR) / "backend.log"
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
     handlers=[
         logging.StreamHandler(sys.stdout),
-        logging.FileHandler(LOG_FILE, encoding="utf-8"),
+        RotatingFileHandler(LOG_FILE, encoding="utf-8",
+                            maxBytes=5 * 1024 * 1024, backupCount=3),
     ],
 )
 logger = logging.getLogger("optical-guidance")

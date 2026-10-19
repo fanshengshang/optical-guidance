@@ -96,6 +96,8 @@ const ProjectorPage: React.FC = () => {
   const scale = Math.min(viewport.w / (pw || 1024), viewport.h / (ph || 768)) || 1
 
   const mode = state?.mode ?? 'idle'
+  // 相机掉线：判定区置灰、不再显示过期引导
+  const stale = mode === 'guide_stale'
   // 待机时后端也用 guide 模式渲染料位轮廓（方便摆位），此时不该显示「模式 guide」
   const standby = !state || state.stepTotal === 0
 
@@ -238,10 +240,10 @@ const ProjectorPage: React.FC = () => {
 
         {/* 取料位 */}
         {targets.map((t) => {
-          const c = colors[t.id] ?? null
+          const c = stale ? null : (colors[t.id] ?? null)
           const fill = (c && FILL[c]) || 'transparent'
-          const stroke = (c && STROKE[c]) || t.color || '#3f4650'
-          const isCurrent = c === 'hint'
+          const stroke = stale ? '#4b5563' : ((c && STROKE[c]) || t.color || '#3f4650')
+          const isCurrent = !stale && c === 'hint'
           const pulse = pulseOn && isCurrent
           const wrapperStyle: React.CSSProperties = pulse
             ? { animation: `og-pulse ${pulseMs}ms ease-in-out infinite` }
@@ -294,6 +296,25 @@ const ProjectorPage: React.FC = () => {
             </div>
           )
         })}
+
+        {/* 取流异常：判定区已置灰，中央醒目提示，别让工人误以为还在引导 */}
+        {stale && (
+          <div
+            style={{
+              position: 'absolute',
+              left: 0,
+              right: 0,
+              top: '42%',
+              textAlign: 'center',
+              color: '#f59e0b',
+              fontSize: 44,
+              fontWeight: 700,
+              letterSpacing: 4,
+            }}
+          >
+            取流异常 · 引导已暂停
+          </div>
+        )}
 
         {/* 进度环 + 引导箭头（单层 SVG 覆盖在料位之上） */}
         {(ringOn || arrow) && (

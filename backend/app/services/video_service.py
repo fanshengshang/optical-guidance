@@ -159,15 +159,29 @@ class VideoManager:
 
     def open(self, camera_id: str, source_type: str, source_url: str,
              width: int, height: int) -> VideoSource:
+        # 快速路径：已有可用源直接返回（锁内只做字典读写）
+        old = None
         with self._lock:
             src = self._sources.get(camera_id)
             if src is not None and src.is_open:
                 return src
             if src is not None:
-                src.release()
-            src = VideoSource(source_type, source_url, width, height)
-            self._sources[camera_id] = src
-            return src
+                self._sources.pop(camera_id, None)
+                old = src
+        # 锁外释放旧源、构造新源：cv2.VideoCapture(DSHOW) 打开是秒级阻塞，
+        # 不能占着 VideoManager 的全局锁 —— 否则预览页在相机打不开时反复重试，
+        # 会一直抢锁，把 start() 的 open 卡住。
+        if old is not None:
+            old.release()
+        new = VideoSource(source_type, source_url, width, height)
+        with self._lock:
+            cur = self._sources.get(camera_id)
+            if cur is not None and cur.is_open:
+                # 并发下别的线程已放好可用源，丢弃自己这份
+                new.release()
+                return cur
+            self._sources[camera_id] = new
+            return new
 
     def get(self, camera_id: str) -> Optional[VideoSource]:
         return self._sources.get(camera_id)

@@ -110,6 +110,8 @@ export interface RuntimeStatus {
   stepIndex: number
   stepTotal: number
   stepText: string
+  /** 当前循环轮次（从 1 开始） */
+  cycle: number
   targetId?: string | null
   handDetected: boolean
   handXy?: number[] | null
@@ -166,6 +168,8 @@ export interface RecordEvent {
   id: string
   runId: string
   stepIndex: number
+  /** 事件属于第几轮循环（从 1 开始） */
+  cycle: number
   targetId?: string | null
   targetName: string
   result: string
@@ -184,6 +188,8 @@ export interface RunItem {
   totalSteps: number
   doneSteps: number
   wrongCount: number
+  /** 已完成的循环轮数 */
+  cycles: number
   startedAt: string
   endedAt?: string | null
   createdAt: string

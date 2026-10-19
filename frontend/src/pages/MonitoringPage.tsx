@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import {
   Alert,
   Button,
@@ -114,6 +114,14 @@ const MonitoringPage: React.FC = () => {
   }
 
   const running = status?.running ?? false
+  // 工序自动走完后端流自然结束，multipart 连接被服务端关闭，<img> 会停在最后一帧。
+  // 手动 start/stop 已 bump nonce，这里补上 running true→false 时再 bump 一次，画面切回预览流。
+  const prevRunningRef = useRef(false)
+  useEffect(() => {
+    const was = prevRunningRef.current
+    prevRunningRef.current = running
+    if (was && !running) bumpNonce()
+  }, [running])
   const streamSrc = selectedCameraId
     ? toAbsoluteApiUrl(`/api/runtime/stream?cameraId=${selectedCameraId}&v=${nonce}`)
     : ''
@@ -225,6 +233,9 @@ const MonitoringPage: React.FC = () => {
           >
             <Card title="运行状态">
               <Descriptions column={1} size="small">
+                <Descriptions.Item label="轮次">
+                  <Tag color="blue">第 {status?.cycle ?? 1} 轮</Tag>
+                </Descriptions.Item>
                 <Descriptions.Item label="当前步骤">{status?.stepText || '—'}</Descriptions.Item>
                 <Descriptions.Item label="进度">
                   <Progress

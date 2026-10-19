@@ -195,6 +195,7 @@ class RuntimeStatusResponse(BaseModel):
     step_index: int = 0
     step_total: int = 0
     step_text: str = ""
+    cycle: int = 1                          # 当前进行到第几轮循环（从 1 开始）
     target_id: Optional[str] = None
     hand_detected: bool = False
     hand_xy: Optional[List[float]] = None
@@ -215,6 +216,7 @@ class EventResponse(BaseModel):
     id: str
     run_id: str
     step_index: int
+    cycle: int = 1
     target_id: Optional[str] = None
     target_name: str
     result: str
@@ -233,6 +235,7 @@ class RunResponse(BaseModel):
     total_steps: int
     done_steps: int
     wrong_count: int
+    cycles: int = 0
     started_at: str
     ended_at: Optional[str] = None
     created_at: str

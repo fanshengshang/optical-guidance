@@ -24,7 +24,7 @@ FIELDS: List[Dict[str, Any]] = [
     {"key": "dwell_sec", "type": "float", "default": 0.12, "min": 0.02, "max": 2.0,
      "group": "判定", "doc": "手停留在取料位多久算「拿对」（秒），越小越灵敏"},
     {"key": "detect_every_n_frames", "type": "int", "default": 1, "min": 1, "max": 5,
-     "group": "判定", "doc": "手部检测跳帧：每 N 帧检一次、中间沿用上次位置，值越大越省 CPU（N=1 即每帧都检）"},
+     "group": "判定", "doc": "手部检测跳帧：每 N 帧检一次、中间沿用上次位置，值越大越省 CPU（N=1 即每帧都检）。注意 N>1 时手位置最多滞后 N 帧、会放大边界抖动，dwell 很短时建议保持 1"},
     # ── 检错 ──────────────────────────────────────────────────
     {"key": "detect_wrong_order", "type": "bool", "default": True,
      "group": "检错", "doc": "检测顺序错：手伸向了后面步骤才该取的取料位"},

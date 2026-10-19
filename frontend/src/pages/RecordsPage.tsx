@@ -33,7 +33,26 @@ const statusColor = (s: string) => STATUS_MAP[s]?.color ?? 'default'
 const statusLabel = (s: string) => STATUS_MAP[s]?.label ?? s
 
 const resultColor = (r: string) =>
-  r === 'ok' ? 'green' : r === 'wrong' ? 'error' : r === 'advance' ? 'blue' : 'default'
+  r === 'ok'
+    ? 'green'
+    : r === 'wrong'
+      ? 'error'
+      : r === 'cycle_done'
+        ? 'blue'
+        : r === 'mis_touch'
+          ? 'warning'
+          : 'default'
+
+const resultLabel = (r: string) =>
+  (
+    {
+      ok: '拿对',
+      wrong: '拿错',
+      wrong_order: '顺序错',
+      mis_touch: '误触',
+      cycle_done: '本轮完成',
+    } as Record<string, string>
+  )[r] ?? r
 
 const RecordsPage: React.FC = () => {
   const [stats, setStats] = useState<RecordStats | null>(null)
@@ -129,10 +148,8 @@ const RecordsPage: React.FC = () => {
                 dataIndex: 'status',
                 render: (s: string) => <Tag color={statusColor(s)}>{statusLabel(s)}</Tag>,
               },
-              {
-                title: '进度',
-                render: (_: unknown, r: RunItem) => `${r.doneSteps} / ${r.totalSteps}`,
-              },
+              { title: '轮次', dataIndex: 'cycles' },
+              { title: '完成步数', dataIndex: 'doneSteps' },
               { title: '拿错次数', dataIndex: 'wrongCount' },
               { title: '开始时间', dataIndex: 'startedAt', render: (v: string) => fmt(v) },
               {
@@ -174,12 +191,13 @@ const RecordsPage: React.FC = () => {
           dataSource={detailEvents}
           pagination={false}
           columns={[
+            { title: '轮次', dataIndex: 'cycle' },
             { title: '步骤', dataIndex: 'stepIndex' },
             { title: '取料位', dataIndex: 'targetName' },
             {
               title: '结果',
               dataIndex: 'result',
-              render: (r: string) => <Tag color={resultColor(r)}>{r}</Tag>,
+              render: (r: string) => <Tag color={resultColor(r)}>{resultLabel(r)}</Tag>,
             },
             { title: '说明', dataIndex: 'detail' },
             { title: '时间', dataIndex: 'createdAt', render: (v: string) => fmt(v) },

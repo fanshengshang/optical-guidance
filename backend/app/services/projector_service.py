@@ -61,6 +61,15 @@ class ProjectorService:
                    step_text="", instruction="", step_index=0, step_total=0,
                    announce=None, message=message)
 
+    def set_stale(self, message: str = "取流异常"):
+        """相机掉线：投影切到「失效」态，判定区置灰、不再显示过期引导。
+
+        只清 colors / 手 / 进度，保留 targets 让前端描灰轮廓，提示取流已中断。
+        """
+        self._bump(mode="guide_stale", colors={}, hand_xy=None, progress=None,
+                   flash=None, step_text="", instruction="", announce=None,
+                   message=message)
+
     def set_announce(self, text: str, tone: str = "start", message: str = ""):
         """开始/结束提示：在投影屏上显示一段大字文案（tone=start 蓝 / end 绿）。"""
         self._bump(mode="announce", announce={"text": text, "tone": tone},

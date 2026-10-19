@@ -81,6 +81,8 @@ class GuidanceService:
         self._hand_target: Optional[str] = None
         self._progress: Optional[float] = None   # 手在当前目标位的停留进度 0..1
         self._wrong_count = 0
+        self._cycle = 1                          # 当前循环轮次（从 1 开始）
+        self._cycle_wrap = False                 # 一轮完成后的过渡标志（等手离开所有料位）
 
     # ─────────────── 查询 ───────────────
     @property
@@ -133,6 +135,7 @@ class GuidanceService:
                 "step_index": eng.step_index if eng else 0,
                 "step_total": eng.step_total if eng else 0,
                 "step_text": eng.step_text() if eng else "",
+                "cycle": self._cycle,
                 "target_id": eng.target_id if eng else None,
                 "hand_detected": self._hand_detected,
                 "hand_xy": list(self._hand_xy) if self._hand_xy else None,
@@ -191,12 +194,14 @@ class GuidanceService:
             return
         # 每轮都重新 open 一遍：运行停止时会把摄像头释放掉，
         # 这里能自动重新打开，空闲预览不会一直卡在「无画面」。
+        retry_delay = 0.5          # open 失败时的退避起点，成功即复位
         while True:
             started = time.monotonic()
             src = video_service.video_manager.open(*cam_info)
             if not src.is_open:
                 jpeg = encode_jpeg(placeholder_frame(src.description or "摄像头打不开"))
             else:
+                retry_delay = 0.5
                 frame = src.read()
                 if frame is None:
                     # 相机帧率低于推流帧率时会有空挡，用 1 秒内的最近帧顶上；
@@ -206,8 +211,13 @@ class GuidanceService:
                         else encode_jpeg(placeholder_frame("摄像头无画面")))
             if jpeg:
                 yield video_service.mjpeg_chunk(jpeg)
-            time.sleep(max(0.005, config.STREAM_INTERVAL_SEC
-                           - (time.monotonic() - started)))
+            if not src.is_open:
+                # 打不开就指数退避（0.5s → 2s 封顶），别每 50ms 重造一次 DSHOW 句柄
+                time.sleep(retry_delay)
+                retry_delay = min(retry_delay * 2, 2.0)
+            else:
+                time.sleep(max(0.005, config.STREAM_INTERVAL_SEC
+                               - (time.monotonic() - started)))
 
     # ─────────────── 标定 ───────────────
     def run_calibration(self, camera_id: Optional[str] = None) -> dict:
@@ -309,6 +319,8 @@ class GuidanceService:
                 self._end_hint = (proc.end_hint or "").strip()
                 self._end_hint_sec = float(proc.end_hint_sec or 3.0)
                 self._wrong_count = 0
+                self._cycle = 1
+                self._cycle_wrap = False
                 self._last_event = None
                 # 上一轮的 fps/画面不能带到新一轮（否则启动瞬间显示陈旧数据）
                 self._fps = 0.0
@@ -426,8 +438,12 @@ class GuidanceService:
                         self._no_frame_since = now
                     elif now - self._no_frame_since >= NO_FRAME_TIMEOUT_SEC:
                         with self._lock:
+                            was_ok = self._source_ok
                             self._source_ok = False
                             self._message = NO_FRAME_MESSAGE
+                        # 只在第一次掉线时切一次投影，别每 50ms 反复 bump
+                        if was_ok:
+                            projector_service.set_stale(NO_FRAME_MESSAGE)
                     time.sleep(0.05)
                     continue
                 if not self._source_ok:
@@ -451,11 +467,37 @@ class GuidanceService:
                 self._hand_cam_last = hand_cam
 
                 eng = self._engine
+                if eng is not None and self._cycle_wrap:
+                    # 轮次间过渡：等手离开所有料位再正式进入下一轮，
+                    # 否则手还停在最后一格会被新一轮误判成「顺序错/拿错」。
+                    if hand_proj is None or eng.target_at(hand_proj[0], hand_proj[1]) is None:
+                        eng.reset()
+                        self._cycle_wrap = False
+                    with self._lock:
+                        self._hand_xy = hand_proj
+                        self._hand_detected = hand_cam is not None
+                        self._hand_target = None
+                        self._progress = None
+                    projector_service.update_guide(
+                        targets=[t.to_dict() for t in eng.targets.values()],
+                        colors={}, step_index=0, step_total=eng.step_total,
+                        step_text=f"第 {self._cycle - 1} 轮完成 · 请开始第 {self._cycle} 轮",
+                        instruction="", hand_xy=hand_proj, progress=None,
+                        flash=None, message=self._message, guide=self._guide)
+                    annotated = self._annotate(frame, hand_cam, hand_proj)
+                    jpeg = encode_jpeg(annotated)
+                    if jpeg:
+                        self._latest_jpeg = jpeg
+                        self._seq += 1
+                    frame_no += 1
+                    time.sleep(0.005)
+                    continue
                 if eng is not None:
                     colors, hand_target, event, progress = eng.update(hand_proj)
                 else:
                     colors, hand_target, event, progress = {}, None, None, None
 
+                record = None
                 with self._lock:
                     self._colors = colors
                     self._hand_detected = hand_cam is not None
@@ -463,12 +505,15 @@ class GuidanceService:
                     self._hand_target = hand_target
                     self._progress = progress
                     if event:
-                        kind, tid = event
+                        kind, tid, event_step = event
                         tname = eng.targets[tid].name if (tid and tid in eng.targets) else ""
                         self._last_event = f"{_event_label(kind)} @ {tname or '-'}"
                         if kind in ("wrong", "wrong_order"):
                             self._wrong_count += 1
-                        self._record_event(kind, tid, tname, frame)
+                        # 只提取快照；全帧落盘 + DB 事务放锁外，别堵 status 轮询
+                        record = (kind, tid, tname, event_step, frame, self._run_id, self._cycle)
+                if record is not None:
+                    self._record_event(*record)
 
                 if eng is not None:
                     flash = ("green" if event and event[0] in ("ok", "advance")
@@ -495,17 +540,15 @@ class GuidanceService:
                     fps_t0 = now
                 last_ts = now
 
-                # 整条工序走完 -> 先显示结束提示，再自动结束本次运行。
+                # 整条工序走完 -> 记一轮完成，回第一步继续循环（直到人工停止）
                 if eng is not None and eng.at_end() and eng.satisfied:
-                    self._message = "工序已完成"
-                    self._wait_announce(self._end_hint, "end", self._end_hint_sec)
-                    projector_service.update_guide(
-                        targets=[t.to_dict() for t in eng.targets.values()],
-                        colors=colors, step_index=eng.step_index, step_total=eng.step_total,
-                        step_text=eng.step_text(), instruction=eng.step_instruction(),
-                        hand_xy=hand_proj, progress=1.0,
-                        flash="green", message="工序已完成", guide=self._guide)
-                    break
+                    self._record_cycle_done()
+                    self._cycle += 1
+                    self._cycle_wrap = True
+                    self._message = f"第 {self._cycle - 1} 轮完成"
+                    wrap_text = self._end_hint or f"第 {self._cycle - 1} 轮完成，继续下一轮"
+                    self._wait_announce(wrap_text, "end", self._end_hint_sec)
+                    # 不 break：下一帧进入 cycle_wrap 过渡，等手离开后回到第一步
 
                 time.sleep(0.005)
         finally:
@@ -516,15 +559,8 @@ class GuidanceService:
                 mine = self._run_token is token
                 if mine:
                     self._detector = None
-                    eng = self._engine
-                    completed = bool(eng and eng.at_end() and eng.satisfied)
-                    total = eng.step_total if eng else 0
-                    if completed:
-                        self._finalize_run(
-                            "done",
-                            "工序完成" if not self._wrong_count else "工序完成（有拿错记录）",
-                            done_steps=total)
-                    elif self._stop_reason:
+                    # 循环模式：不再有「完成即 done」，run 只以 stopped（人工）/ aborted 结束
+                    if self._stop_reason:
                         self._finalize_run("stopped", self._stop_reason)   # 操作员主动停止
                     else:
                         self._finalize_run("aborted", "未走完")
@@ -548,21 +584,31 @@ class GuidanceService:
         # 之前只画 5px 的点，操作员"看起来手在圈里"和"引擎认为在圈里"完全不是一回事。
         if self._engine is not None and self._H is not None:
             Hm = np.asarray(self._H, dtype=np.float64)
+            # 先把所有判定区的多边形算出来，再一次性做半透明填充，
+            # 避免原来每个料位各 copy 一次全帧 + 各 addWeighted 一次（5 料位 = 6 次全帧分配）。
+            polys = []
             for idx, t in enumerate(self._engine.targets.values()):
                 col = COLOR_BGR.get(self._colors.get(t.id)) or (170, 170, 170)
                 try:
                     pts = np.array(_outline_proj(t), dtype=np.float32).reshape(1, -1, 2)
                     poly = np.round(cv2.perspectiveTransform(pts, Hm)[0]).astype(np.int32)
-                    over = vis.copy()
-                    cv2.fillPoly(over, [poly], col)
-                    cv2.addWeighted(over, 0.20, vis, 0.80, 0, vis)
-                    cv2.polylines(vis, [poly], True, col, 2, cv2.LINE_AA)
-                    cx, cy = proj_to_cam((t.x, t.y), self._H)
-                    cv2.drawMarker(vis, (cx, cy), col, cv2.MARKER_TILTED_CROSS, 14, 2)
-                    cv2.putText(vis, _ascii_label(t.name, idx), (cx + 12, cy - 10),
-                                cv2.FONT_HERSHEY_SIMPLEX, 0.6, col, 2, cv2.LINE_AA)
+                    polys.append((poly, col, t, idx))
                 except Exception:
                     pass
+            if polys:
+                mask = np.zeros(vis.shape[:2], dtype=np.uint8)
+                overlay = np.zeros_like(vis)
+                for poly, col, _t, _i in polys:
+                    cv2.fillPoly(mask, [poly], 255)
+                    cv2.fillPoly(overlay, [poly], col)
+                blended = cv2.addWeighted(overlay, 0.20, vis, 0.80, 0)
+                vis = np.where(mask[..., None] > 0, blended, vis).astype(np.uint8)
+            for poly, col, t, idx in polys:
+                cv2.polylines(vis, [poly], True, col, 2, cv2.LINE_AA)
+                cx, cy = proj_to_cam((t.x, t.y), self._H)
+                cv2.drawMarker(vis, (cx, cy), col, cv2.MARKER_TILTED_CROSS, 14, 2)
+                cv2.putText(vis, _ascii_label(t.name, idx), (cx + 12, cy - 10),
+                            cv2.FONT_HERSHEY_SIMPLEX, 0.6, col, 2, cv2.LINE_AA)
 
         # 手：按「是否落在判定区内」变色 —— 灰 = 没命中（这时系统不会有任何反应）
         if hand_cam is not None:
@@ -592,23 +638,50 @@ class GuidanceService:
         return vis
 
     # ─────────────── 记录 ───────────────
-    def _record_event(self, kind: str, target_id: Optional[str], target_name: str, frame):
-        if not self._run_id:
+    def _record_event(self, kind: str, target_id: Optional[str], target_name: str,
+                      event_step: int, frame, run_id: Optional[str], cycle: int):
+        """落一条取料事件。锁外调用：frame / run_id / event_step / cycle 都是调用方传进来的快照。
+
+        step_index 用事件发生时的 event_step（ok 事件是 advance 前的步序），
+        不再读 self._engine.step_index —— 否则拿对即推进后 ok 会错位到下一步。
+        """
+        if not run_id:
             return
-        step_index = self._engine.step_index if self._engine else 0
-        snap = recorder.save_snapshot(frame, self._run_id, step_index, kind)
+        snap = recorder.save_snapshot(frame, run_id, event_step, kind)
         db = SessionLocal()
         try:
             db.add(EventModel(
-                id=str(uuid.uuid4()), run_id=self._run_id, step_index=step_index,
+                id=str(uuid.uuid4()), run_id=run_id, step_index=event_step,
+                cycle=cycle,
                 target_id=target_id, target_name=target_name, result=kind,
                 detail=_event_label(kind), snapshot_path=snap, created_at=_now()))
-            run = db.query(RunModel).filter(RunModel.id == self._run_id).first()
+            run = db.query(RunModel).filter(RunModel.id == run_id).first()
             if run is not None:
-                if kind == "advance":
-                    run.done_steps = max(run.done_steps or 0, step_index)
+                if kind == "ok":
+                    # 循环模式：done_steps 累计总完成步数（跨轮）
+                    run.done_steps = (run.done_steps or 0) + 1
                 elif kind in ("wrong", "wrong_order"):
                     run.wrong_count = (run.wrong_count or 0) + 1
+            db.commit()
+        finally:
+            db.close()
+
+    def _record_cycle_done(self):
+        """记一条「第 N 轮完成」事件，并把 run.cycles 更新为已完成轮数。"""
+        if not self._run_id:
+            return
+        db = SessionLocal()
+        try:
+            db.add(EventModel(
+                id=str(uuid.uuid4()), run_id=self._run_id,
+                step_index=0, cycle=self._cycle,
+                target_id=None, target_name="",
+                result="cycle_done",
+                detail=f"第 {self._cycle} 轮完成",
+                snapshot_path=None, created_at=_now()))
+            run = db.query(RunModel).filter(RunModel.id == self._run_id).first()
+            if run is not None:
+                run.cycles = self._cycle
             db.commit()
         finally:
             db.close()
@@ -676,7 +749,8 @@ def _ascii_label(text: str, idx: int = 0) -> str:
 
 def _event_label(kind: str) -> str:
     return {"ok": "拿对", "wrong": "拿错", "wrong_order": "顺序错",
-            "mis_touch": "误触", "advance": "进入下一步"}.get(kind, kind)
+            "mis_touch": "误触", "advance": "进入下一步",
+            "cycle_done": "本轮完成"}.get(kind, kind)
 
 
 def DEFAULT_MODEL_REL_FROM_DB(db) -> str:

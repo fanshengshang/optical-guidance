@@ -3,7 +3,8 @@
 
 规则：
   - 目标取料位常显「待取」提示色（hint）
-  - 手进入目标位并停留 dwell 秒 -> green（拿对），抬手离开后自动推进到下一步
+  - 手进入目标位并停留 dwell 秒 -> green（拿对），拿对**立即**推进到下一步，
+    刚完成的那格锁绿（green）直到手离开，期间绝不判红/判错
   - 手进入非目标位并停留 dwell 秒 -> red（拿错；若该位属于后面步骤，另标「顺序错」）
   - 手刚进入、未满停留 -> 中性色（目标位 hint / 非目标位 warn），并给出停留进度
   - 误触：手进了目标位、但没停够 dwell 就离开
@@ -73,6 +74,7 @@ class GuidanceEngine:
         self._enter_at: Dict[str, float] = {}
         self._cur_target: Optional[str] = None
         self._satisfied = False
+        self._done_target: Optional[str] = None     # 刚拿对、手还没离开的位（锁绿）
         self._wrong_hold: Optional[str] = None      # 拿错后持续红提示的取料位
         self.last_wrong_target: Optional[str] = None
 
@@ -142,7 +144,9 @@ class GuidanceEngine:
         """返回 (colors, hand_target, event, progress)。
 
         colors  : {target_id: 'hint'|'green'|'red'|'warn'|None}
-        event   : ('ok'|'wrong'|'wrong_order'|'mis_touch'|'advance', target_id or None)
+        event   : ('ok'|'wrong'|'wrong_order'|'mis_touch', target_id or None,
+                   event_step) —— event_step 是事件发生那一刻的步骤序号，
+                   尤其 ok 事件在 advance 前记录，避免归因错位到下一步。
         progress: 手在当前位的停留进度 0..1（没落在任何取料位时为 None）
         """
         now = time.monotonic()
@@ -163,56 +167,68 @@ class GuidanceEngine:
         progress = None
         if hand_target is None:
             prev = self._cur_target
+            # 手抬离：刚完成的锁绿位随之解除（手真的离开了该位）
+            self._done_target = None
             # 误触：手进了目标位、没停够 dwell 就离开
             if (self.detect_mis_touch and prev is not None and prev == want
                     and not self._satisfied):
                 stayed = now - self._enter_at.get(prev, now)
                 if self.mis_touch_sec <= stayed < dwell:
-                    event = ("mis_touch", prev)
-            if self._satisfied and self.advance():
-                event = ("advance", None)
+                    event = ("mis_touch", prev, self.step_index)
             self._enter_at.clear()
             self._cur_target = None
         else:
             # 换到另一个位时重新计时（否则会命中上一次停留的旧时间戳）
             if hand_target != self._cur_target:
-                # 当前位已经拿对、手又直接滑到了另一个取料位（中间没有帧落在空白区）：
-                # 先按「离开」推进一步，再在新步骤里重新判定。
-                # 否则会把下一步本该拿的那一格误判成「拿错」。
-                if self._satisfied and self._cur_target is not None and self.advance():
-                    event = ("advance", None)
-                    want = self.target_id
-                    colors = {tid: None for tid in self.targets}
-                    if want:
-                        colors[want] = "hint"
-                    if self.hold_red_until_correct and self._wrong_hold in colors:
-                        colors[self._wrong_hold] = "red"
+                # 手离开了刚完成的锁绿位，解除锁绿
+                if self._done_target is not None and hand_target != self._done_target:
+                    self._done_target = None
                 self._cur_target = hand_target
                 self._enter_at.clear()
             started = self._enter_at.setdefault(hand_target, now)
             elapsed = now - started
             progress = min(1.0, elapsed / dwell) if dwell > 0 else 1.0
-            if elapsed >= dwell:
+
+            # 手停在刚完成的锁绿位：保持绿，不再参与任何判定（绝不判红）
+            if self._done_target is not None and hand_target == self._done_target:
+                colors[hand_target] = "green"
+                progress = 1.0
+            elif elapsed >= dwell:
                 if hand_target == want:
                     colors[hand_target] = "green"
                     self._wrong_hold = None
                     if not self._satisfied:
                         self._satisfied = True
-                        event = ("ok", hand_target)
+                        # 事件发生在 advance 之前，记下此刻的步序，避免归因错位
+                        event = ("ok", hand_target, self.step_index)
+                        # 拿对即推进：立刻进入下一步，并把刚完成位锁绿到手离开。
+                        # 手无需抬离，下一步的蓝光提示已经亮起。
+                        if self.advance():
+                            self._done_target = hand_target
+                            want = self.target_id
+                            if want:
+                                colors[want] = "hint"
+                            if self.hold_red_until_correct and self._wrong_hold in colors:
+                                colors[self._wrong_hold] = "red"
                 else:
                     colors[hand_target] = "red"
                     self.last_wrong_target = hand_target
                     self._wrong_hold = hand_target
                     if self.detect_wrong_order and self._is_future_target(hand_target):
-                        event = ("wrong_order", hand_target)
+                        event = ("wrong_order", hand_target, self.step_index)
                     else:
-                        event = ("wrong", hand_target)
+                        event = ("wrong", hand_target, self.step_index)
             else:
                 colors[hand_target] = "hint" if hand_target == want else "warn"
 
         return colors, hand_target, event, progress
 
     def advance(self) -> bool:
+        """推进到下一步。返回 False 表示已是最后一步、无下一步可推。
+
+        方案 A：拿对即推进 —— 由 update() 在「ok」事件里立即调用，
+        不再等手抬离。刚完成位的锁绿由调用方用 _done_target 记录。
+        """
         if self.step_index < len(self.steps) - 1:
             self.step_index += 1
             self._satisfied = False
@@ -225,6 +241,7 @@ class GuidanceEngine:
     def reset(self):
         self.step_index = 0
         self._satisfied = False
+        self._done_target = None
         self._enter_at.clear()
         self._cur_target = None
         self._wrong_hold = None

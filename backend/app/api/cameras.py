@@ -4,12 +4,13 @@ import uuid
 from datetime import datetime
 from typing import List
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
 
 from ..models.database import CameraModel
 from ..models.schemas import CameraCreate, CameraResponse, MessageResponse
 from ..services.calibration_service import detect_cameras
+from ..services.guidance_service import guidance_service
 from .dependencies import get_db
 
 router = APIRouter(prefix="/api/cameras", tags=["cameras"])
@@ -21,8 +22,10 @@ def list_cameras(db: Session = Depends(get_db)):
 
 
 @router.get("/scan")
-def scan_local_devices(max_index: int = 6):
-    """扫描本机可用的本地摄像头（会短暂占用设备，运行中请勿调用）。"""
+def scan_local_devices(max_index: int = Query(6, ge=1, le=16)):
+    """扫描本机可用的本地摄像头（会短暂占用设备，运行中拒绝调用）。"""
+    if guidance_service.running:
+        raise HTTPException(status_code=409, detail="运行中无法扫描摄像头，请先停止")
     return {"devices": detect_cameras(max_index)}
 
 
